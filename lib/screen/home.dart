@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:IntelliHome/global/common/client_mqtt.dart';
 import 'package:IntelliHome/model/mqtt_model.dart';
+import 'package:IntelliHome/screen/Notification/notifcation_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   ValueNotifier<String> tempDataNotifier = ValueNotifier("0");
-  ValueNotifier<bool> _isConnectMQTTNotifier = ValueNotifier(false);
+  // ValueNotifier<bool> _isConnectMQTTNotifier = ValueNotifier(false);
   // INITIALIZE USERNAME VARIABLE
   late String username = '';
   // TRACK USER'S LOGIN STATUS
@@ -43,10 +44,16 @@ class _HomeState extends State<Home> {
     _listenerHandleData();
   }
 
-  void _connectFailed(){
+  
+  void _connectFailed() {
     print('Connect failed!!!');
     Future.delayed(const Duration(milliseconds: 1000), () {
-      connectMQTT(_connectSuccess,_connectFailed);
+      connectMQTT(_connectSuccess, _connectFailed);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to connect to MQTT server'),
+        ),
+      );
     });
   }
 
@@ -108,19 +115,29 @@ class _HomeState extends State<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-
-                    // MENU
-                    Builder(
-                      builder: (context) {
-                        return IconButton(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            return IconButton(
+                              onPressed: () {
+                                Scaffold.of(context).openDrawer();
+                              },
+                              icon: Icon(Icons.menu),
+                            );
+                          },
+                        ),
+                        IconButton(
                           onPressed: () {
-                            Scaffold.of(context).openDrawer();
-                          }, 
-                          icon: Icon(
-                            Icons.menu
-                          )
-                        );
-                      }
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => NotificationScreen()),
+                            );
+                          },
+                          icon: Icon(Icons.notifications),
+                        ),
+                      ],
                     ),
 
                     // DISPLAY TEMPERATURE AND ADD BUTTON

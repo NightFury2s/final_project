@@ -1,4 +1,5 @@
 import 'package:IntelliHome/constants/app_colors.dart';
+import 'package:IntelliHome/screen/Notification/notifcation_screen.dart';
 import 'package:IntelliHome/screen/SettingPage/components/forward_button.dart';
 import 'package:IntelliHome/screen/SettingPage/components/setting_item.dart';
 import 'package:IntelliHome/screen/SettingPage/components/setting_switch.dart';
@@ -7,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
+import 'package:IntelliHome/screen/SettingPage/components/theme_switch.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -16,18 +19,15 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  // INITIALIZE USERNAME VARIABLE
   late String username = '';
   late String userEmail = '';
 
   @override
   void initState() {
     super.initState();
-    // CALL FUNCTION TO RETRIEVE USERNAME
     getUsernameAndEmail();
   }
-  
-  // FETCH USERNAME AND EMAIL FROM FIRESTORE
+
   Future<void> getUsernameAndEmail() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -38,14 +38,16 @@ class _SettingPageState extends State<SettingPage> {
 
       setState(() {
         username = userSnapshot['username'] ?? '';
-        userEmail = user.email ?? ''; // Lấy email của người dùng từ Firebase Authentication
+        userEmail = user.email ?? '';
       });
     }
   }
 
-  bool isDarkMode = false;
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+    bool isDarkMode = themeNotifier.isDarkMode;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -66,7 +68,7 @@ class _SettingPageState extends State<SettingPage> {
                 "Cài đặt",
                 style: TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(height: 40),
@@ -74,12 +76,10 @@ class _SettingPageState extends State<SettingPage> {
                 "Tài khoản",
                 style: TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.w500
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               SizedBox(height: 20),
-
-              // ACCOUNT SETTING
               SizedBox(
                 width: double.infinity,
                 child: Row(
@@ -97,7 +97,7 @@ class _SettingPageState extends State<SettingPage> {
                           username,
                           style: TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.w500
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         SizedBox(height: 10),
@@ -105,7 +105,7 @@ class _SettingPageState extends State<SettingPage> {
                           userEmail,
                           style: TextStyle(
                             fontSize: 14,
-                            color: AppColor.grey
+                            color: AppColor.grey,
                           ),
                         )
                       ],
@@ -116,8 +116,8 @@ class _SettingPageState extends State<SettingPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const editProfile()
-                          )
+                            builder: (context) => const editProfile(),
+                          ),
                         );
                       },
                     ),
@@ -129,12 +129,10 @@ class _SettingPageState extends State<SettingPage> {
                 "Cài đặt",
                 style: TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.w500
-                )
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               SizedBox(height: 20),
-          
-              // LANGUAGE SETTING BUTTON
               settingItem(
                 title: 'Ngôn ngữ',
                 icon: Ionicons.earth,
@@ -144,18 +142,19 @@ class _SettingPageState extends State<SettingPage> {
                 onTap: () {},
               ),
               SizedBox(height: 20),
-              
-              // NOTIFICATION SETTING BUTTON
               settingItem(
                 title: 'Thông báo',
                 icon: Ionicons.notifications,
                 bgColor: Colors.blue.shade100,
                 iconColor: Colors.blue,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => NotificationScreen()),
+                  );
+                },
               ),
               SizedBox(height: 20),
-          
-              // DARK MODE SETTING BUTTON
               settingSwitch(
                 title: 'Dark Mode',
                 icon: Ionicons.earth,
@@ -163,21 +162,10 @@ class _SettingPageState extends State<SettingPage> {
                 iconColor: Colors.purple,
                 value: isDarkMode,
                 onTap: (value) {
-                  setState(() {
-                    isDarkMode = value;
-                  });
+                  themeNotifier.toggleTheme();
                 },
               ),
               SizedBox(height: 20),
-          
-              // HELP SETTING BUTTON
-              // settingItem(
-              //   title: 'Trợ giúp',
-              //   icon: Ionicons.help,
-              //   bgColor: Colors.red.shade100,
-              //   iconColor: AppColor.red,
-              //   onTap: () {},
-              // )
             ],
           ),
         ),

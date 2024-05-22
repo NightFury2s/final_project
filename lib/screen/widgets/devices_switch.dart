@@ -1,6 +1,6 @@
-import 'dart:convert';
+// import 'dart:convert';
 
-import 'package:IntelliHome/model/mqtt_model.dart';
+// import 'package:IntelliHome/model/mqtt_model.dart';
 import 'package:flutter/material.dart';
 import 'package:IntelliHome/constants/app_colors.dart';
 import 'package:IntelliHome/model/smart_home_model.dart';
@@ -11,7 +11,7 @@ class DeviceSwitch extends StatefulWidget {
    DeviceSwitch({super.key, required this.data,this.client});
 
   final DeviceInRoom data;
-  MqttServerClient? client;
+  final MqttServerClient? client;
 
   @override
   State<DeviceSwitch> createState() => _DeviceSwitchState();

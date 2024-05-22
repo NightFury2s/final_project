@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:IntelliHome/constants/app_colors.dart';
 // import 'package:IntelliHome/screen/Auth/Login/login_page.dart';
-import 'package:IntelliHome/screen/home.dart';
+// import 'package:IntelliHome/screen/home.dart';
 
 import 'Auth/Login/login_page.dart';
 
