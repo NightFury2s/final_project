@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:IntelliHome/constants/app_colors.dart';
 import 'package:IntelliHome/model/smart_home_model.dart';
 import 'package:IntelliHome/screen/room_controller.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
+// import 'package:mqtt_client/mqtt_server_client.dart';
 
 class RoomCard extends StatelessWidget {
    RoomCard({super.key, required this.roomData});

@@ -11,6 +11,7 @@ import 'package:IntelliHome/model/smart_home_model.dart';
 import 'package:IntelliHome/screen/room_card.dart';
 import 'package:IntelliHome/screen/widgets/drawer.dart';
 import 'package:mqtt_client/mqtt_client.dart';
+import 'package:IntelliHome/screen/widgets/weather.dart';
 
 class Home extends StatefulWidget {
 
@@ -230,49 +231,7 @@ class _HomeState extends State<Home> {
 
                     // DISPLAY WEATHER
                     Container(
-                      width: double.infinity,
-                      height: 70,
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppColor.white,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 10,
-                            spreadRadius: 5,
-                            color: AppColor.black.withOpacity(.1)
-                          ),
-                        ],
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(35),
-                          bottomLeft: Radius.circular(35),
-                        )
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: AppColor.fgColor.withOpacity(.1),
-                              shape: BoxShape.circle
-                            ),
-                            child: Icon(
-                              Icons.wb_cloudy_sharp,
-                              size: 30,
-                              color: AppColor.grey,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "Thời tiết hôm nay: Nắng",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            ),
-                          )
-                        ],
-                      ),
+                      child: WeatherWidget(),
                     ),
 
                     // DISPLAY ALL ROOM
